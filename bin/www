@@ -1,0 +1,89 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+require('dotenv').config();
+
+var app = require('../app');
+var debug = require('debug')('nuitdelinfo2023:server');
+var http = require('http');
+const https = require('https');
+const fs = require('fs')
+const is_secured = fs.existsSync(process.env.SSL_CERTIFICATE) && fs.existsSync(process.env.SSL_PRIVATE_KEY) && fs.existsSync(process.env.SSL_CHAIN);
+
+
+let port = normalizePort(process.env.PORT || (is_secured ? '443' : '80'));
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+let server = null;
+if (is_secured) {
+  const privateKey = fs.readFileSync(process.env.SSL_PRIVATE_KEY, 'utf8');
+  const certificate = fs.readFileSync(process.env.SSL_CERTIFICATE, 'utf8');
+  const ca = fs.readFileSync(process.env.SSL_CHAIN, 'utf8');
+
+  server = https.createServer({key: privateKey, cert: certificate, ca: ca}, app);
+  console.info(`Start secured server on port ${port}`)
+} else {
+  server = http.createServer(app);
+  console.warn(`Start unsecured server on port ${port}`)
+}
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', (error) => {
+  if (error['syscall'] !== 'listen') {
+    throw error;
+  }
+
+  let bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+});
+server.on('listening', () => {
+  let addr = server.address();
+  let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+});
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  let port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}

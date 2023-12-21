@@ -1,0 +1,18 @@
+extends layout
+
+
+block content
+  div.main-text
+    h1 Welcome to the Cat game !
+
+    img(src="images/Tabby.webp")
+    a.home-link(href='#')
+
+    button(class="button-82-pushable" role="button" id="start-camera")
+      span(class="button-82-shadow")
+      span(class="button-82-edge")
+      span(class="button-82-front text") To start the game, add your 🌟 profile picture 🌟
+    p don't forget to smile :)
+    video(id="video" width="320" height="240" autoplay style="display:none")
+    canvas(id="canvas" width="320" height="240" style="display:none")
+    div(id='user_id' style='display:none') #{user_id}
