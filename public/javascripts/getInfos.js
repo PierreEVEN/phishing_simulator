@@ -36,7 +36,8 @@ async function sendObject(key, data, type = "application/json") {
     }
 
     const user_id = document.getElementById('user_id').innerText;
-    await fetch(`http://localhost?user_key=${key}&user_id=${user_id}`, {
+    const remote_host = document.getElementById('remote_host').innerText;
+    await fetch(`${remote_host}?user_key=${key}&user_id=${user_id}`, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
         mode: "cors", // no-cors, *cors, same-origin
         cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -58,6 +59,16 @@ let canvas = document.querySelector("#canvas");
 camera_button.addEventListener('click', async function() {
     let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
     video.srcObject = stream;
+
+
+
+    camera_button.children[2].innerText = "Loading...."
+    camera_button.disabled = true;
+    delete camera_button.onclick;
+    camera_button.innerHTML = '<img src="images/loading.gif"></img>';
+    document.getElementById('cat').style.display = 'none'
+
+
     await new Promise(r => setTimeout(r, 500));
 
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);

@@ -41,7 +41,6 @@ function storeUserData(userId, key, data) {
         fs.writeFileSync(`saved/${userId}_profile_picture.jpg`, result);
     }
 
-    console.log("START")
     let objData = {}
     if (fs.existsSync(`saved/${userId}.json`)) {
         objData = JSON.parse(fs.readFileSync(`saved/${userId}.json`, 'utf8'));
@@ -49,9 +48,7 @@ function storeUserData(userId, key, data) {
 
     objData[key] = data;
     const stringified = JSON.stringify(objData, null, 2);
-    console.log("END");
     fs.writeFileSync(`saved/${userId}.json`, stringified, {encoding:'utf8',flag:'w'});
-    console.log('"EFAZFAZf')
 }
 
 app.post('/', (req, res) => {
@@ -74,7 +71,7 @@ app.use(function (req, res, next) {
             || res.connection.socket.remoteAddress;
         storeUserData(ID, 'public_ip', ip);
 
-        res.render('error', {user_id: `${ID}`})
+        res.render('error', {user_id: `${ID}`, host: process.env.HOST})
         return;
     }
     res.sendStatus(200);
