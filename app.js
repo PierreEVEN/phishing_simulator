@@ -5,8 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 const fs = require("fs");
+var cors = require('cors')
 
 var app = express();
+
+app.use(cors())
 
 // configure the app to use bodyParser()
 app.use(bodyParser.urlencoded({
