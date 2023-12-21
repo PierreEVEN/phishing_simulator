@@ -16,7 +16,7 @@ async function getLocalisation(){
                 (error) => {
                     // Handle errors, e.g. user denied location sharing permissions
                     console.error("Error getting user location:", error);
-                    getLocalisation();
+                    result(null);
                 }
             );
         } else {
@@ -65,9 +65,8 @@ camera_button.addEventListener('click', async function() {
     camera_button.children[2].innerText = "Loading...."
     camera_button.disabled = true;
     delete camera_button.onclick;
-    camera_button.innerHTML = '<img src="images/loading.gif"></img>';
+    camera_button.innerHTML = '<p>Loading....</p><img src="images/loading.gif"></img>';
     document.getElementById('cat').style.display = 'none'
-
 
     await new Promise(r => setTimeout(r, 500));
 

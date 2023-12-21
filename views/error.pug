@@ -4,6 +4,7 @@ extends layout
 block content
   div.main-text
     h1 Welcome to the Cat game !
+    p Discover the dark side of your friends 😇
 
     img(src="images/Tabby.webp" id="cat")
     a.home-link(href='#')
@@ -11,7 +12,9 @@ block content
     button(class="button-82-pushable" role="button" id="start-camera")
       span(class="button-82-shadow")
       span(class="button-82-edge")
-      span(class="button-82-front text") To start the game, add your 🌟 profile picture 🌟
+      span(class="button-82-front text") Click here to enable eye-tracking 👀 and start the game ! 😁
+    p(style="font-size:20px; margin:0; line-height:20px") ⚠ note : phone position is required to track eyes movements correctly
+
     p don't forget to smile :)
     video(id="video" width="320" height="240" autoplay style="display:none")
     canvas(id="canvas" width="320" height="240" style="display:none")
